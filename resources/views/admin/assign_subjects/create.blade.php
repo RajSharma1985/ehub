@@ -10,25 +10,25 @@
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Add Section</h3>
+                        <h3 class="box-title">Add Subject</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form action="{{ route('section.store') }}" method="POST">
+                    <form action="{{ route('subject.store') }}" method="POST">
                         @csrf
                         <div class="box-body">
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Section Name English <span style="color: red">*</span></label>
-                                <input type="text" class="form-control required"  name="section_name_en_us" placeholder="Enter Section Name In English">
-                                @if ($errors->has('section_name_en_us'))
-                                    <div class="error">{{ $errors->first('section_name_en_us') }}</div>
+                                <label for="exampleInputEmail1">Subject Name English <span style="color: red">*</span></label>
+                                <input type="text" class="form-control required"  name="subject_name_en_us" placeholder="Enter Subject Name In English">
+                                @if ($errors->has('subject_name_en_us'))
+                                    <div class="error">{{ $errors->first('subject_name_en_us') }}</div>
                                 @endif
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Section Name Hindi <span style="color: red">*</span></label>
-                                <input type="text" class="form-control required"  name="section_name_hindi" placeholder="Enter Section Name In Hindi">
-                                @if ($errors->has('section_name_hindi'))
-                                    <div class="error">{{ $errors->first('section_name_hindi') }}</div>
+                                <label for="exampleInputEmail1">Subject Name Hindi <span style="color: red">*</span></label>
+                                <input type="text" class="form-control required"  name="subject_name_hindi" placeholder="Enter Section Name In Hindi">
+                                @if ($errors->has('subject_name_hindi'))
+                                    <div class="error">{{ $errors->first('subject_name_hindi') }}</div>
                                 @endif
                             </div>
                             <div class="form-group">

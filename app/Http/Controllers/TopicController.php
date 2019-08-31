@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Helper\Constant;
-use App\Model\AssignSubjects;
 use App\Model\Section;
 use App\Model\Subjects;
+use App\Model\Topics;
 use Illuminate\Http\Request;
 use View;
 use Illuminate\Support\Facades\Validator;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Session;
 
-class SectionController extends Controller
+class TopicController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,10 +23,10 @@ class SectionController extends Controller
     public function index()
     {
         // get all the nerds
-        $section = Section::paginate(10);
+        $topics = Topics::paginate(10);
 
         // load the view and pass the nerds
-        return view('admin.section.index', compact('section'));
+        return view('admin.topics.index', compact('topics'));
     }
 
     /**
@@ -37,7 +37,8 @@ class SectionController extends Controller
     public function create()
     {
         $status = Constant::$status;
-        return View::make('admin.section.create',compact('status'));
+        $sections = Section::whereIn('status',[1,'1'])->get();
+        return View::make('admin.topics.create',compact('status','sections'));
     }
 
     /**
@@ -52,18 +53,19 @@ class SectionController extends Controller
         // validate
         // read more on validation at http://laravel.com/docs/validation
         $rules = array(
-            'section_name_en_us' => 'required|unique:section|max:255',
-            'section_name_hindi' => 'required|unique:section|max:255',
+            'topic_name_en_us' => 'required|unique:section|max:255',
+            'topic_name_hindi' => 'required|unique:section|max:255',
             'status' => 'required',
         );
         $validator = Validator::make(Input::all(), $rules);
 
         // process the login
         if ($validator->fails()) {
-            return Redirect::to('section/create')
+            return Redirect::to('topic/create')
                 ->withErrors($validator)
-                ->withInput(Input::except('section_name'));
+                ->withInput(Input::except('topic_name'));
         } else {
+            dd($request->all());
             // store
             $section = new Section;
             $sctionName = ['en_us'=>Input::get('section_name_en_us'),'hindi'=>Input::get('section_name_hindi')];
@@ -72,9 +74,6 @@ class SectionController extends Controller
             $section->status = Input::get('status');
             $section->save();
 
-            $assignSubjects = new AssignSubjects;
-            $assignSubjects->section_id = $section->_id;
-            $assignSubjects->save();
             // redirect
             Session::flash('message', 'Successfully created section!');
             return Redirect::to('section');
@@ -106,7 +105,7 @@ class SectionController extends Controller
     public function edit($id)
     {
         // get the nerd
-        
+
         $section = Section::find($id);
         $status = Constant::$status;
         return View::make('admin.section.edit',compact('status','section'));
@@ -140,7 +139,7 @@ class SectionController extends Controller
             if(!empty($section)){
 
                 $sctionName = ['en_us'=>Input::get('section_name_en_us'),'hindi'=>Input::get('section_name_hindi')];
-                $section->section_lang = $sctionName;
+                $section->section_lan = $sctionName;
                 $section->section_name = Input::get('section_name_en_us');
                 $section->status = Input::get('status');
                 $section->save();
@@ -162,8 +161,8 @@ class SectionController extends Controller
         $section = Section::findOrFail($id);
         if(!empty($section))
         {
-           $section->delete();
-           AssignSubjects::where('section_id',$section->_id)->delete();
+            $section->delete();
+            Subjects::where('section_id',$section->_id)->delete();
         }
         Session::flash('message', 'Section successfully deleted!');
         return Redirect::to('section');

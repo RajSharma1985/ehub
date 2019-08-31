@@ -31,19 +31,6 @@
                                     <div class="error">{{ $errors->first('section_name_hindi') }}</div>
                                 @endif
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Status <span style="color: red">*</span></label>
-                                {{--<input type="text" class="form-control required"  name="section_name_en_us" placeholder="Enter Section Name In English">--}}
-                                <select class="form-control" name="status">
-                                    <option value="">Select Status</option>
-                                    @foreach($status as $key=>$value)
-                                        <option value="{{$key}}">{{$value}}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('status'))
-                                    <div class="error">{{ $errors->first('status') }}</div>
-                                @endif
-                            </div>
 
                         </div>
                         <!-- /.box-body -->

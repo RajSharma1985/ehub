@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="{{asset('bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')}}" />
     <link rel="stylesheet" href="{{asset('bower_components/bootstrap-daterangepicker/daterangepicker.css')}}" />
     <link rel="stylesheet" href="{{asset('plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/style.css')}}" />
+    <link rel="stylesheet" href="{{asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}" />
     @yield('stylesheets')
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -46,6 +48,90 @@
     <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
     <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
     <script src="{{ asset('dist/js/demo.js') }}"></script>
+    <script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bower_components/ckeditor/ckeditor.js') }}"></script>
+    <script>
+        $(function () {
+            $('#datatable').DataTable()
+
+        })
+        $(function () {
+            CKEDITOR.replace('topic_desc_en_us')
+
+        })
+        $(function () {
+            CKEDITOR.replace('topic_desc_hindi')
+
+        })
+    </script>
+    <script>
+        function strDes(a, b) {
+            if (a.value>b.value) return 1;
+            else if (a.value<b.value) return -1;
+            else return 0;
+        }
+
+        console.clear();
+        $('#btnRight').click(function (e) {
+            var selectedOpts = $('#lstBox1 option:selected');
+            if (selectedOpts.length == 0) {
+                alert("Nothing to move.");
+                e.preventDefault();
+            }
+
+            $('#lstBox2').append($(selectedOpts).clone());
+            $(selectedOpts).remove();
+
+            /* -- Uncomment for optional sorting --
+             var box2Options = $('#lstBox2 option');
+             var box2OptionsSorted;
+             box2OptionsSorted = box2Options.toArray().sort(strDes);
+             $('#lstBox2').empty();
+             box2OptionsSorted.forEach(function(opt){
+             $('#lstBox2').append(opt);
+             })
+             */
+
+            e.preventDefault();
+        });
+
+        $('#btnAllRight').click(function (e) {
+            var selectedOpts = $('#lstBox1 option');
+            if (selectedOpts.length == 0) {
+                alert("Nothing to move.");
+                e.preventDefault();
+            }
+
+            $('#lstBox2').append($(selectedOpts).clone());
+            $(selectedOpts).remove();
+            e.preventDefault();
+        });
+
+        $('#btnLeft').click(function (e) {
+            var selectedOpts = $('#lstBox2 option:selected');
+            if (selectedOpts.length == 0) {
+                alert("Nothing to move.");
+                e.preventDefault();
+            }
+
+            $('#lstBox1').append($(selectedOpts).clone());
+            $(selectedOpts).remove();
+            e.preventDefault();
+        });
+
+        $('#btnAllLeft').click(function (e) {
+            var selectedOpts = $('#lstBox2 option');
+            if (selectedOpts.length == 0) {
+                alert("Nothing to move.");
+                e.preventDefault();
+            }
+
+            $('#lstBox1').append($(selectedOpts).clone());
+            $(selectedOpts).remove();
+            e.preventDefault();
+        });
+    </script>
     @yield('scripts')
 </body>
 </html>
