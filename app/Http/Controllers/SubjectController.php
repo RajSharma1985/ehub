@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Helper\Constant;
 use App\Model\Section;
 use App\Model\Subjects;
+use App\Model\AssignSubjects;
 use Illuminate\Http\Request;
 use View;
 use Illuminate\Support\Facades\Validator;
@@ -155,6 +156,22 @@ class SubjectController extends Controller
         $subject->delete();
         Session::flash('message', 'Subject successfully deleted!');
         return Redirect::to('subject');
+
+    }
+
+    public function getSubjects(Request $request){
+        if(!empty($request->section_id)){
+            $data = AssignSubjects::where('section_id',$request->section_id)->first();
+            if(!empty($data->assigned_subjects)){
+               $subjects = Subjects::select('_id','subject_name')->whereIn('_id',$data->assigned_subjects)->get()->toArray();
+               return ['status'=>'success', 'data'=>$subjects, 'message'=>'Subject founds'];
+            }else{
+                return ['status'=>'error', 'data'=>[], 'message'=>'Subject not founds'];
+            }
+        }
+        else{
+            return ['status'=>'error', 'data'=>[], 'message'=>'Subject not founds'];
+        }
 
     }
 }

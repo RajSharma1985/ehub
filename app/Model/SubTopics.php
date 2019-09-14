@@ -4,9 +4,9 @@ namespace App\Model;
 
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
-class Topics extends Eloquent
+class SubTopics extends Eloquent
 {
     protected $connection = 'mongodb';
-    protected $collection = 'topics';
-
+    protected $collection = 'subtopics';
+    //
 }

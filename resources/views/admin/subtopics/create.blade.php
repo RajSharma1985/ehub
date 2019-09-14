@@ -10,43 +10,56 @@
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Add Topic</h3>
+                        <h3 class="box-title">Add Sub Topic</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form action="{{ route('topic.store') }}" method="POST">
+                    <form action="{{ route('subtopic.store') }}" method="POST">
                         @csrf
                         <div class="box-body">
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Topic Name English <span style="color: red">*</span></label>
-                                <input type="text" class="form-control required"  name="topic_name_en_us" placeholder="Enter Topic Name In English">
-                                @if ($errors->has('topic_name_en_us'))
-                                    <div class="error">{{ $errors->first('topic_name_en_us') }}</div>
+                                <label for="exampleInputEmail1">Topic <span style="color: red">*</span></label>
+                                {{--<input type="text" class="form-control required"  name="section_name_en_us" placeholder="Enter Section Name In English">--}}
+                                <select class="form-control" name="topic_name">
+                                    <option value="">Select Topic</option>
+                                    @foreach($topics as $key=>$value)
+                                        <option value="{{$value->_id}}">{{$value->topic_name}}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('topic_name'))
+                                    <div class="error">{{ $errors->first('topic_name') }}</div>
                                 @endif
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Topic Name Hindi <span style="color: red">*</span></label>
-                                <input type="text" class="form-control required"  name="topic_name_hindi" placeholder="Enter Topic Name In Hindi">
-                                @if ($errors->has('topic_name_hindi'))
-                                    <div class="error">{{ $errors->first('topic_name_hindi') }}</div>
+                                <label for="exampleInputEmail1">Sub Topic Name English <span style="color: red">*</span></label>
+                                <input type="text" class="form-control required"  name="sub_topic_name_en_us" placeholder="Enter Sub Topic Name In English">
+                                @if ($errors->has('sub_topic_name_en_us'))
+                                    <div class="error">{{ $errors->first('sub_topic_name_en_us') }}</div>
                                 @endif
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Topic Description English <span style="color: red">*</span></label>
-                                <textarea id="topic_desc_en_us"  name="topic_desc_en_us" placeholder="Enter Topic Description In English" rows="10" cols="80">
+                                <label for="exampleInputEmail1">Sub Topic Name Hindi <span style="color: red">*</span></label>
+                                <input type="text" class="form-control required"  name="sub_topic_name_hindi" placeholder="Enter Sub Topic Name In Hindi">
+                                @if ($errors->has('sub_topic_name_hindi'))
+                                    <div class="error">{{ $errors->first('sub_topic_name_hindi') }}</div>
+                                @endif
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Sub Topic Description English <span style="color: red">*</span></label>
+                                <textarea id="sub_topic_desc_en_us"  name="sub_topic_desc_en_us" placeholder="Enter Sub Topic Description In English" rows="10" cols="80">
 
                                 </textarea>
-                                @if ($errors->has('topic_desc_en_us'))
-                                    <div class="error">{{ $errors->first('topic_desc_en_us') }}</div>
+                                @if ($errors->has('sub_topic_desc_en_us'))
+                                    <div class="error">{{ $errors->first('sub_topic_desc_en_us') }}</div>
                                 @endif
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Topic Description Hindi <span style="color: red">*</span></label>
-                                <textarea id="topic_desc_hindi"  name="topic_desc_hindi" placeholder="Enter Topic Description In " rows="10" cols="80">
+                                <label for="exampleInputEmail1">Sub Topic Description Hindi <span style="color: red">*</span></label>
+                                <textarea id="sub_topic_desc_hindi"  name="sub_topic_desc_hindi" placeholder="Enter Sub Topic Description In " rows="10" cols="80">
 
                                 </textarea>
-                                @if ($errors->has('topic_desc_hindi'))
-                                    <div class="error">{{ $errors->first('topic_desc_hindi') }}</div>
+                                @if ($errors->has('sub_topic_desc_hindi'))
+                                    <div class="error">{{ $errors->first('sub_topic_desc_hindi') }}</div>
                                 @endif
                             </div>
                             {{--<div class="form-group">--}}

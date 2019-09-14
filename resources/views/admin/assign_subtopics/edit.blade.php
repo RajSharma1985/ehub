@@ -8,20 +8,20 @@
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Assigned Subject</h3>
+                        <h3 class="box-title">Assigned Sub Topics</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form action="{{ route('assignsubjects.update',$assSubject->_id) }}" method="POST">
+                    <form action="{{ route('assignsubtopic.update',$topic->_id) }}" method="POST">
                         @method('PATCH')
                         @csrf
                         <div class="box-body">
                             <div class="subject-info-box-1">
-                                <label>Total Subjects</label>
+                                <label>Total Topics</label>
                                 <select multiple="multiple" name="total_selections[]" id='lstBox1' class="form-control">
                                     <optgroup value="Testing">
-                                 @foreach($allSubjects as $key=>$value)
-                                    <option selected value="{{$value->_id}}">{{$value->subject_name}}</option>
+                                 @foreach($subtopics as $key=>$value)
+                                    <option selected value="{{$value->_id}}">{{$value->sub_topic_name}}</option>
                                     @endforeach
                                     </optgroup>
                                 </select>
@@ -35,11 +35,11 @@
                             </div>
 
                             <div class="subject-info-box-2">
-                                <label>Assigned Subjects</label>
+                                <label>Assigned Sub Topics</label>
                                 <select multiple="multiple" name="assigned_selections[]" id='lstBox2' class="form-control">
                                 <optgroup value="Testing">
-                                 @foreach($assignedSubject as $key=>$value)
-                                    <option selected value="{{$value->_id}}">{{$value->subject_name}}</option>
+                                 @foreach($assginSubTopics as $key=>$value)
+                                    <option selected value="{{$value->_id}}">{{$value->sub_topic_name}}</option>
                                     @endforeach
                                     </optgroup>
                                 </select>

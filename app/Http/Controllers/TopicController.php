@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Helper\Constant;
 use App\Model\Section;
 use App\Model\Subjects;
+use App\Model\AssignTopics;
 use App\Model\Topics;
 use Illuminate\Http\Request;
 use View;
@@ -49,12 +50,13 @@ class TopicController extends Controller
      */
     public function store(Request $request)
     {
-
         // validate
         // read more on validation at http://laravel.com/docs/validation
         $rules = array(
-            'topic_name_en_us' => 'required|unique:section|max:255',
-            'topic_name_hindi' => 'required|unique:section|max:255',
+            'topic_name_en_us' => 'required|unique:topics',
+            'topic_name_hindi' => 'required|unique:topics',
+            'topic_desc_en_us' => 'required|unique:topics',
+            'topic_desc_hindi' => 'required|unique:topics',
             'status' => 'required',
         );
         $validator = Validator::make(Input::all(), $rules);
@@ -65,18 +67,19 @@ class TopicController extends Controller
                 ->withErrors($validator)
                 ->withInput(Input::except('topic_name'));
         } else {
-            dd($request->all());
             // store
-            $section = new Section;
-            $sctionName = ['en_us'=>Input::get('section_name_en_us'),'hindi'=>Input::get('section_name_hindi')];
-            $section->section_lang = $sctionName;
-            $section->section_name = Input::get('section_name_en_us');
-            $section->status = Input::get('status');
-            $section->save();
+            $topics = new Topics;
+            $topicsName = ['en_us'=>Input::get('topic_name_en_us'),'hindi'=>Input::get('topic_name_hindi')];
+            $topicsDesc = ['en_us'=>Input::get('topic_desc_en_us'),'hindi'=>Input::get('topic_desc_hindi')];
+            $topics->topic_name_lang = $topicsName;
+            $topics->topic_desc_lang = $topicsDesc;
+            $topics->topic_name = Input::get('topic_name_en_us');
+            $topics->status = Input::get('status');
+            $topics->save();
 
             // redirect
-            Session::flash('message', 'Successfully created section!');
-            return Redirect::to('section');
+            Session::flash('message', 'Successfully created topic!');
+            return Redirect::to('topic');
         }
     }
 
@@ -89,7 +92,7 @@ class TopicController extends Controller
     public function show($id)
     {
         // get the nerd
-        $section = Section::find($id);
+        $section = Topics::find($id);
 
         // show the view and pass the nerd to it
         return View::make('admin.section.show')
@@ -106,9 +109,9 @@ class TopicController extends Controller
     {
         // get the nerd
 
-        $section = Section::find($id);
+        $topics = Topics::find($id);
         $status = Constant::$status;
-        return View::make('admin.section.edit',compact('status','section'));
+        return View::make('admin.topics.edit',compact('status','topics'));
     }
 
     /**
@@ -122,30 +125,34 @@ class TopicController extends Controller
     {
 
         $rules = array(
-            'section_name_en_us' => 'required|unique:section|max:255',
-            'section_name_hindi' => 'required|unique:section|max:255',
+            'topic_name_en_us' => 'required|unique:topics',
+            'topic_name_hindi' => 'required|unique:topics',
+            'topic_desc_en_us' => 'required|unique:topics',
+            'topic_desc_hindi' => 'required|unique:topics',
             'status' => 'required',
         );
         $validator = Validator::make(Input::all(), $rules);
 
         // process the login
         if ($validator->fails()) {
-            return Redirect::to(route('section.edit', ['id' => $id]))
+            return Redirect::to(route('topic.edit', ['id' => $id]))
                 ->withErrors($validator)
-                ->withInput(Input::except('section_name'));
+                ->withInput(Input::except('topic_name'));
         } else {
             // store
-            $section = Section::where('_id',$id)->first();
-            if(!empty($section)){
+            $topics = Topics::where('_id',$id)->first();
+            if(!empty($topics)){
 
-                $sctionName = ['en_us'=>Input::get('section_name_en_us'),'hindi'=>Input::get('section_name_hindi')];
-                $section->section_lan = $sctionName;
-                $section->section_name = Input::get('section_name_en_us');
-                $section->status = Input::get('status');
-                $section->save();
+                $topicsName = ['en_us'=>Input::get('topic_name_en_us'),'hindi'=>Input::get('topic_name_hindi')];
+                $topicsDesc = ['en_us'=>Input::get('topic_desc_en_us'),'hindi'=>Input::get('topic_desc_hindi')];
+                $topics->topic_name_lang = $topicsName;
+                $topics->topic_desc_lang = $topicsDesc;
+                $topics->topic_name = Input::get('topic_name_en_us');
+                $topics->status = Input::get('status');
+                $topics->save();
                 // redirect
-                Session::flash('message', 'Successfully updated section!');
-                return Redirect::to('section');
+                Session::flash('message', 'Successfully updated topic!');
+                return Redirect::to('topic');
             }
         }
     }
@@ -158,15 +165,31 @@ class TopicController extends Controller
      */
     public function destroy($id)
     {
-        $section = Section::findOrFail($id);
-        if(!empty($section))
+        $topic = Topics::findOrFail($id);
+        if(!empty($topic))
         {
-            $section->delete();
-            Subjects::where('section_id',$section->_id)->delete();
+            $topic->delete();
+
         }
-        Session::flash('message', 'Section successfully deleted!');
-        return Redirect::to('section');
+        Session::flash('message', 'Topic successfully deleted!');
+        return Redirect::to('topic');
 
 
+    }
+
+    public function getTopics(Request $request){
+        if(!empty($request->subject_id)){
+            $assignTopics = AssignTopics::where('subject_id',$request->subject_id)->first();
+            if(!empty($assignTopics->assign_topics)){
+                $topics = Topics::select('_id','topic_name')->whereIn('_id',$assignTopics->assign_topics)->get();
+                return ['status'=>'success', 'data'=>$topics, 'message'=>'Topics founds'];
+            }
+            else{
+                return ['status'=>'error', 'data'=>[], 'message'=>'Topics not founds'];
+            }
+        }
+        else{
+            return ['status'=>'error', 'data'=>[], 'message'=>'Topics not founds'];
+        }
     }
 }

@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Section;
-use App\Model\AssignSubjects;
+use App\Http\Helper\Constant;
+use App\Model\Topics;
+use App\Model\AssignTopics;
 use App\Model\Subjects;
 use Illuminate\Http\Request;
-use App\Http\Helper\Constant;
 use View;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Session;
 
-class AssignSubjectController extends Controller
+class AssignTopicController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,11 +22,8 @@ class AssignSubjectController extends Controller
      */
     public function index()
     {
-        // get all the nerds
-
-        $assignSubjects = AssignSubjects::with('getSection')->paginate(2);
-        // load the view and pass the nerds
-        return view('admin.assign_subjects.index', compact('assignSubjects'));
+        $subjects = Subjects::paginate(10);
+        return view('admin.assign_topics.index', compact('subjects'));
     }
 
     /**
@@ -69,17 +66,17 @@ class AssignSubjectController extends Controller
      */
     public function edit($id)
     {
-        $assignedSubject = [];
-        $assSubject = AssignSubjects::find($id);
-        // echo "<pre>";print_r($assignSubject);exit;
-        $allSubjects = Subjects::whereIn('status',['1',1]);
-        if(!empty($assSubject->assigned_subjects)){
-            $allSubjects = $allSubjects->whereNotIn('_id',$assSubject->assigned_subjects);
-            $assignedSubject = Subjects::whereIn('_id',$assSubject->assigned_subjects)->get();
-            
+        $subject = Subjects::find($id);
+        $assignTopics = [];
+        $assTopics = AssignTopics::where('subject_id',$id)->first();
+        $topics = Topics::whereIn('status',[1,'1']);
+        if(!empty($assTopics->assign_topics)){
+            $topics = $topics->whereNotIn('_id',$assTopics->assign_topics);
+            $assignTopics = Topics::whereIn('_id',$assTopics->assign_topics)->get();
         }
-        $allSubjects = $allSubjects->get();
-         return View::make('admin.assign_subjects.edit',compact('assignedSubject', 'assSubject','allSubjects'));
+       
+        $topics = $topics->get();
+        return View::make('admin.assign_topics.edit',compact('topics','assignTopics','subject'));
     }
 
     /**
@@ -99,19 +96,22 @@ class AssignSubjectController extends Controller
 
         // process the login
         if ($validator->fails()) {
-            return Redirect::to(route('assignsubjects.edit', $id))
+            return Redirect::to(route('assigntopics.edit', $id))
                 ->withErrors($validator);
 
         } else {
-            $assignSubject = AssignSubjects::where('_id', $id)->first();
-            if (!empty($assignSubject)) {
-                $assignSubject->assigned_subjects = $request->assigned_selections;
-                $assignSubject->save();
+                $assignTopics = AssignTopics::where('subject_id',$id)->first();
+                if(empty($assignTopics)){
+                    $assignTopics = new AssignTopics();     
+                }
+                $assignTopics->subject_id = $id;
+                $assignTopics->assign_topics = $request->assigned_selections;
+                $assignTopics->save();
 
                 // redirect
-                Session::flash('message', 'Successfully assigned subject!');
-                return Redirect::to('assignsubjects');
-            }
+                Session::flash('message', 'Successfully assigned topics!');
+                return Redirect::to('assigntopics');
+            
         }
     }
 

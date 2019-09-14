@@ -17,7 +17,6 @@
         @endif
         <!-- Main content -->
         <section class="content">
-           <a href="{{ URL::to('topic/create') }}" class="btn btn-primary btn-lg pull-right">Add Topic</a>
             <div class="row">
                 <div class="col-xs-12">
                     <div class="box">
@@ -27,9 +26,8 @@
                                 <tr>
                                     <th>SNo.</th>
                                     <th>Topic Name</th>
-                                    <th>Status</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
+                                    <th>Subtopics</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -37,13 +35,9 @@
                                     <tr>
                                         <td>{{$indexKey + 1}}</td>
                                         <td>{{$item->topic_name}}</td>
-                                        <td>{{ ($item->status) ? 'Active' : 'Deactive' }}</td>
-                                        <td> <a href="{{ route('topic.edit', ['id' => $item->_id]) }}" class="btn btn-success btn-md">Edit</a></td>
-                                        <td><form action="{{ url('/topic', ['id' => $item->id]) }}" method="post">
-                                                    <input class="btn btn-danger btn-md" type="submit" value="Delete" />
-                                                    @method('delete')
-                                                    @csrf
-                                                </form></td>
+                                        <td>{!! App\Model\AssignSubTopics::getSubTopics($item->_id) !!}</td>
+                                        <td> <a href="{{ route('assignsubtopic.edit', ['id' => $item->_id]) }}" class="btn btn-success btn-md">Assign</a></td>
+                                        
                                     </tr>
                                 @endforeach
                                 </tbody>

@@ -49,7 +49,8 @@
                         <!-- /.box-body -->
 
                         <div class="box-footer">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                        <a href="{{ url()->previous() }}" class="btn btn-danger">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                     </form>
                 </div>

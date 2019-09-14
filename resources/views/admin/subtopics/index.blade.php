@@ -17,7 +17,7 @@
         @endif
         <!-- Main content -->
         <section class="content">
-           <a href="{{ URL::to('topic/create') }}" class="btn btn-primary btn-lg pull-right">Add Topic</a>
+           <a href="{{ URL::to('subtopic/create') }}" class="btn btn-primary btn-lg pull-right">Add Sub Topic</a>
             <div class="row">
                 <div class="col-xs-12">
                     <div class="box">
@@ -26,20 +26,20 @@
                                 <thead>
                                 <tr>
                                     <th>SNo.</th>
-                                    <th>Topic Name</th>
+                                    <th>Sub Topic Name</th>
                                     <th>Status</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($topics as  $indexKey => $item)
+                                @foreach($subtopics as  $indexKey => $item)
                                     <tr>
                                         <td>{{$indexKey + 1}}</td>
-                                        <td>{{$item->topic_name}}</td>
+                                        <td>{{$item->sub_topic_name}}</td>
                                         <td>{{ ($item->status) ? 'Active' : 'Deactive' }}</td>
-                                        <td> <a href="{{ route('topic.edit', ['id' => $item->_id]) }}" class="btn btn-success btn-md">Edit</a></td>
-                                        <td><form action="{{ url('/topic', ['id' => $item->id]) }}" method="post">
+                                        <td> <a href="{{ route('subtopic.edit', ['id' => $item->_id]) }}" class="btn btn-success btn-md">Edit</a></td>
+                                        <td><form action="{{ url('/subtopic', ['id' => $item->id]) }}" method="post">
                                                     <input class="btn btn-danger btn-md" type="submit" value="Delete" />
                                                     @method('delete')
                                                     @csrf
@@ -48,7 +48,7 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                            {{ $topics->links() }}
+                            {{ $subtopics->links() }}
                         </div>
                     </div>
                 </div>

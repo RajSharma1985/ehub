@@ -64,6 +64,30 @@
             CKEDITOR.replace('topic_desc_hindi')
 
         })
+        $(function () {
+            CKEDITOR.replace('sub_topic_desc_en_us')
+
+        })
+        $(function () {
+            CKEDITOR.replace('sub_topic_desc_hindi')
+
+        })
+        $(function () {
+            CKEDITOR.replace('question_title_en_us')
+
+        })
+        $(function () {
+            CKEDITOR.replace('question_title_hindi')
+
+        })
+        $(function () {
+            CKEDITOR.replace('question_desc_en_us')
+
+        })
+        $(function () {
+            CKEDITOR.replace('question_desc_hindi')
+
+        })
     </script>
     <script>
         function strDes(a, b) {

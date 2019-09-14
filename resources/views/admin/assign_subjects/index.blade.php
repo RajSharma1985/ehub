@@ -35,7 +35,7 @@
                                     <tr>
                                         <td>{{$indexKey + 1}}</td>
                                         <td>{{$item->getSection->section_name}}</td>
-                                        <td> <a href="{{ route('assignsubjects.edit', ['id' => $item->_id]) }}" class="btn btn-success btn-md">Edit</a></td>
+                                        <td> {!! App\Model\AssignSubjects::getSubjects($item->_id) !!}</td>
                                         <td><a href="{{ route('assignsubjects.edit', ['id' => $item->_id]) }}" class="btn btn-success btn-md">Assign Subjects</a></td>
                                     </tr>
                                 @endforeach

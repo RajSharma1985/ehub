@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Section;
-use App\Model\AssignSubjects;
-use App\Model\Subjects;
-use Illuminate\Http\Request;
 use App\Http\Helper\Constant;
+use App\Model\Topics;
+use App\Model\AssignSubTopics;
+use App\Model\SubTopics;
+use Illuminate\Http\Request;
 use View;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Session;
 
-class AssignSubjectController extends Controller
+class AssignSubTopicController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,11 +22,8 @@ class AssignSubjectController extends Controller
      */
     public function index()
     {
-        // get all the nerds
-
-        $assignSubjects = AssignSubjects::with('getSection')->paginate(2);
-        // load the view and pass the nerds
-        return view('admin.assign_subjects.index', compact('assignSubjects'));
+        $topics = Topics::paginate(10);
+        return view('admin.assign_subtopics.index', compact('topics'));
     }
 
     /**
@@ -58,7 +55,7 @@ class AssignSubjectController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
@@ -69,17 +66,17 @@ class AssignSubjectController extends Controller
      */
     public function edit($id)
     {
-        $assignedSubject = [];
-        $assSubject = AssignSubjects::find($id);
-        // echo "<pre>";print_r($assignSubject);exit;
-        $allSubjects = Subjects::whereIn('status',['1',1]);
-        if(!empty($assSubject->assigned_subjects)){
-            $allSubjects = $allSubjects->whereNotIn('_id',$assSubject->assigned_subjects);
-            $assignedSubject = Subjects::whereIn('_id',$assSubject->assigned_subjects)->get();
-            
+        $topic = Topics::find($id);
+        $assginSubTopics = [];
+        $assSubTopics = AssignSubTopics::where('topic_id',$id)->first();
+        $subtopics = Subtopics::whereIn('status',[1,'1']);
+        if(!empty($assSubTopics->assign_sub_topics)){
+            $subtopics = $subtopics->whereNotIn('_id',$assSubTopics->assign_sub_topics);
+            $assginSubTopics = SubTopics::whereIn('_id',$assSubTopics->assign_sub_topics)->get();
         }
-        $allSubjects = $allSubjects->get();
-         return View::make('admin.assign_subjects.edit',compact('assignedSubject', 'assSubject','allSubjects'));
+       
+        $subtopics = $subtopics->get();
+        return View::make('admin.assign_subtopics.edit',compact('subtopics','assginSubTopics','topic'));
     }
 
     /**
@@ -91,6 +88,7 @@ class AssignSubjectController extends Controller
      */
     public function update(Request $request, $id)
     {
+        
         $rules = array(
             'assigned_selections' => 'required|unique:section|max:255'
 
@@ -99,19 +97,22 @@ class AssignSubjectController extends Controller
 
         // process the login
         if ($validator->fails()) {
-            return Redirect::to(route('assignsubjects.edit', $id))
+            return Redirect::to(route('assignsubtopic.edit', $id))
                 ->withErrors($validator);
 
         } else {
-            $assignSubject = AssignSubjects::where('_id', $id)->first();
-            if (!empty($assignSubject)) {
-                $assignSubject->assigned_subjects = $request->assigned_selections;
-                $assignSubject->save();
+                $assignSubTopic = AssignSubTopics::where('topic_id',$id)->first();
+                if(empty($assignSubTopic)){
+                    $assignSubTopic = new AssignSubTopics();     
+                }
+                $assignSubTopic->topic_id = $id;
+                $assignSubTopic->assign_sub_topics = $request->assigned_selections;
+                $assignSubTopic->save();
 
                 // redirect
-                Session::flash('message', 'Successfully assigned subject!');
-                return Redirect::to('assignsubjects');
-            }
+                Session::flash('message', 'Successfully assigned sub topics!');
+                return Redirect::to('assignsubtopic');
+            
         }
     }
 
@@ -125,4 +126,6 @@ class AssignSubjectController extends Controller
     {
         //
     }
+
+    
 }

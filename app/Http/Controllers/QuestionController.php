@@ -2,7 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helper\Constant;
+use App\Model\Section;
+use App\Model\Questions;
 use Illuminate\Http\Request;
+use View;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
+use Session;
+
 
 class QuestionController extends Controller
 {
@@ -13,7 +22,8 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
+        $questions = Questions::paginate(10);
+        return view('admin.questions.index', compact('questions'));
     }
 
     /**
@@ -23,7 +33,10 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        //
+        $sections = Section::whereIn('status',['1',1])->get();
+        $status = Constant::$status;
+        $questionType = Constant::$questionType;
+        return View::make('admin.questions.create',compact('status','sections','questionType'));
     }
 
     /**

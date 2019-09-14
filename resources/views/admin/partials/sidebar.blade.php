@@ -27,7 +27,11 @@
                     <li class="active"><a href="{{ URL::to('section') }}"><i class="fa fa-circle-o"></i> Section</a></li>
                     <li><a href="{{ URL::to('subject') }}"><i class="fa fa-circle-o"></i> Subject</a></li>
                     <li><a href="{{ URL::to('assignsubjects') }}"><i class="fa fa-circle-o"></i> Assing Subject</a></li>
+                    <li><a href="{{ URL::to('assigntopics') }}"><i class="fa fa-circle-o"></i> Assing Topic</a></li>
+                    <li><a href="{{ URL::to('assignsubtopic') }}"><i class="fa fa-circle-o"></i> Assing Sub Topic</a></li>
                     <li><a href="{{ URL::to('topic') }}"><i class="fa fa-circle-o"></i> Topic</a></li>
+                    <li><a href="{{ URL::to('subtopic') }}"><i class="fa fa-circle-o"></i> Sub Topic</a></li>
+                    <li><a href="{{ URL::to('question') }}"><i class="fa fa-circle-o"></i> Questions</a></li>
                 </ul>
             </li>
 
